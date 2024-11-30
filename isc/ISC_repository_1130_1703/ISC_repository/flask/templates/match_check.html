@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- jQuery 라이브러리 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- jQuery Cookie Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>ISC - 매칭 요청 확인</title>
+  </head>
+
+  <body>
+    <div class="status-bar">
+      <div class="status-bar__column">
+        <span>No Service</span>
+        <!-- To Do: wifi-icon -->
+        <i class="fa-solid fa-wifi"></i>
+      </div>
+      <div class="status-bar__column">
+        <span>18:43</span>
+      </div>
+      <div class="status-bar__column">
+        <span>100%</span>
+        <!-- battery icon -->
+        <i class="fa-solid fa-battery-full fa-2x"></i>
+        <!-- lightning icon -->
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+    </div>
+    <div class="screen-header">
+      <span><i class="screen-header__icon"></i></span>
+      <h1 class="screen-header__title">돌봄 다이어리</h1>
+      <img src="#" class="screen-header__img" />
+    </div>
+    <div class="navigation-bar">
+      <button class="navigation-bar__prev">◀</button>
+      <span class="navigation-bar__current">11월 둘째 주</span>
+      <button class="navigation-bar__next">▶</button>
+    </div>
+
+    <!-- 요일 선택 -->
+    <div class="diary-weekend">
+      {% for day, date in week_dates %}
+      <a
+        href="{{ url_for('care_record_page', date=date) }}"
+        class="diary-weekend__day {% if current_date == date %}active{% endif %}"
+      >
+        {{ day }} <br />
+        <span class="day-number">{{ date[-2:] }}</span>
+      </a>
+      {% endfor %}
+    </div>
+
+    <!-- 데이터 표시 -->
+    <div class="care-container">
+      {% if cares %} {% for care in cares %}
+      <div class="care-item">
+        <div class="care-time">{{ care.time }}</div>
+        <div class="care-details">
+          <div class="care-title">{{ care.content }}</div>
+          {% if care.photo %}
+          <div class="care-photo">
+            <img
+              src="{{ url_for('static', filename=care.photo) }}"
+              alt="첨부된 사진"
+            />
+          </div>
+          {% endif %} {% if care.comment %}
+          <div class="care-comment">{{ care.comment }}</div>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <p class="no-data">선택된 날짜에 데이터가 없습니다.</p>
+      {% endif %}
+    </div>
+
+    <div class="todo-link">
+      <a href="/todo">todo-maker</a>
+      <a href="/todo_carecody" style="margin-left: 20px"
+        >내 ToDo 페이지로 이동</a
+      >
+      <a href="/diary" style="margin-left: 20px">돌봄 diary로 이동</a>
+    </div>
+  </body>
+</html>
